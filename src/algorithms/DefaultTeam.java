@@ -12,24 +12,50 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class DefaultTeam {
+	
   public ArrayList<Point> calculDominatingSet(ArrayList<Point> points, int edgeThreshold) {
-    //REMOVE >>>>>
+	  
     ArrayList<Point> result = (ArrayList<Point>)points.clone();
-    for (int i=0;i<points.size()/3;i++) result.remove(0);
-    // if (false) result = readFromFile("output0.points");
-    // else saveToFile("output",result);
-    //<<<<< REMOVE
+    ArrayList arete = new ArrayList();
+    int max = 0;
+    double distanceX = 0;
+    double distanceY = 0;
+    double distanceTotal = 0;
+    
+    for (int i = 0; i < result.size()/3; i++) {
+    	
+    	for( int j = 0; j < result.size()/3; j++) {
+    		
+    		distanceX = result.get(i).getX() - result.get(j).getX();
+    		distanceY = result.get(i).getY() - result.get(j).getY();
+
+    		distanceTotal = Math.abs(distanceX - distanceY);
+    		
+    		if(distanceTotal <= edgeThreshold) {
+    			System.out.println(distanceTotal);
+            	result.remove(i);
+            	result.remove(j);
+        	}
+    		
+    	}
+    	
+    }
 
     return result;
   }
   
   
   //FILE PRINTER
-  private void saveToFile(String filename,ArrayList<Point> result){
+  public void saveToFile(String filename,ArrayList<Point> result){
+	  
     int index=0;
+    
     try {
+    	
       while(true){
+    	  
         BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(filename+Integer.toString(index)+".points")));
+        
         try {
           input.close();
         } catch (IOException e) {
@@ -37,11 +63,13 @@ public class DefaultTeam {
         }
         index++;
       }
+      
     } catch (FileNotFoundException e) {
       printToFile(filename+Integer.toString(index)+".points",result);
     }
   }
-  private void printToFile(String filename,ArrayList<Point> points){
+  public void printToFile(String filename,ArrayList<Point> points){
+	  
     try {
       PrintStream output = new PrintStream(new FileOutputStream(filename));
       int x,y;
@@ -50,13 +78,16 @@ public class DefaultTeam {
     } catch (FileNotFoundException e) {
       System.err.println("I/O exception: unable to create "+filename);
     }
+    
   }
 
   //FILE LOADER
-  private ArrayList<Point> readFromFile(String filename) {
+  public ArrayList<Point> readFromFile(String filename) {
+	  
     String line;
     String[] coordinates;
     ArrayList<Point> points=new ArrayList<Point>();
+    
     try {
       BufferedReader input = new BufferedReader(
           new InputStreamReader(new FileInputStream(filename))
