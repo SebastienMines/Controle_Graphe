@@ -2,7 +2,7 @@ package algorithms;
 
 import java.awt.Point;
 import java.util.ArrayList;
-
+import java.util.Collections;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -16,31 +16,29 @@ public class DefaultTeam {
   public ArrayList<Point> calculDominatingSet(ArrayList<Point> points, int edgeThreshold) {
 	  
     ArrayList<Point> result = (ArrayList<Point>)points.clone();
-    ArrayList arete = new ArrayList();
-    int max = 0;
-    double distanceX = 0;
-    double distanceY = 0;
     double distanceTotal = 0;
     
-    for (int i = 0; i < result.size()/3; i++) {
+    //Se positionne sur un point i
+    for (int i = 0; i < result.size(); i++) {
     	
-    	for( int j = 0; j < result.size()/3; j++) {
+		//Parcours tous les autres points afin de determiner les voisins de i
+    	for( int j = 0; j < result.size(); j++) {
     		
-    		distanceX = result.get(i).getX() - result.get(j).getX();
-    		distanceY = result.get(i).getY() - result.get(j).getY();
-
-    		distanceTotal = Math.abs(distanceX - distanceY);
-    		
+    		//calcul la distance entre le point i et le point j.
+    		distanceTotal = result.get(i).distance(result.get(j).getX(), result.get(j).getY());
+        	    		    		
+    		//Regarde sie le point j peux etre considere comme un voisin du point i
     		if(distanceTotal <= edgeThreshold) {
-    			System.out.println(distanceTotal);
-            	result.remove(i);
-            	result.remove(j);
+    			
+    			//supprime les voisins afin de ne pas les considerer comme surveillant plustard
+    			result.remove(j);
+    			        		
         	}
     		
-    	}
+    	}	
     	
     }
-
+  
     return result;
   }
   
